@@ -1,0 +1,8 @@
+DJANGO_SECRET_KEY=your_secret_key
+DEBUG=True
+DJANGO_ALLOWED_HOSTS=your_server_IP_address
+STATIC_ACCESS_KEY_ID=your_space_access_key_id
+STATIC_SECRET_KEY=your_space_secret_key
+STATIC_BUCKET_NAME=your_space_name
+STATIC_ENDPOINT_URL=https://nyc1.digitaloceanspaces.com
+DJANGO_LOGLEVEL=info
