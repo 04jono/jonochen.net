@@ -1,0 +1,16 @@
+services:
+  django:
+    env_file:
+      - .env
+    build:
+      context: .
+    expose:
+      - "8000"
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - django
