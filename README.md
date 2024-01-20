@@ -1,5 +1,5 @@
 # jonochen.net
 
-Personal website built using Django.
+Personal website built with Django.
 
 Deployed using Docker Compose, using NGINX and Gunicorn Docker containers.
