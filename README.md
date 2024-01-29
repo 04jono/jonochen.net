@@ -1,5 +1,5 @@
 # jonochen.net
 
-Personal website built with Django.
+Monolith repo for all projects hosted on jonochen.net.
 
-Deployed using Docker Compose, using NGINX and Gunicorn Docker containers.
+Personal website built using Django. Django and PostgreSQL deployed using Docker Compose.
