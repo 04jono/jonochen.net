@@ -8,7 +8,6 @@ class Song(models.Model):
     name = models.CharField(max_length=255)
     artist = models.CharField(max_length=255)
     year = models.CharField(max_length=255)
-    genres = ArrayField(models.CharField(max_length=255))
     album_url = models.CharField(max_length=255)
     spotify_uri = models.CharField(primary_key=True, max_length=255)
 

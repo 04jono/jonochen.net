@@ -15,3 +15,13 @@ services:
       - .env
     ports:
       - "5432:5432"
+
+  spotify:
+    env_file:
+      - .env
+    build:
+      context: ./scripts
+      dockerfile: ./scripts/Dockerfile
+    command: bash -c "sleep 10 && python scripts/get_spotify.py --filter arsch"
+
+    
