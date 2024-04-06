@@ -1,6 +1,6 @@
 FROM python:3.11-alpine
 
-ADD jonochen.net/requirements.txt /app/requirements.txt
+ADD requirements.txt /app/requirements.txt
 
 RUN set -ex \
     && python -m venv /env \
@@ -15,8 +15,10 @@ RUN set -ex \
     && apk add --virtual rundeps $runDeps \
     && apk del .build-deps
 
-ADD jonochen.net /app
+ADD get_spotify.py /app
 WORKDIR /app
+
+ENV PYTHONUNBUFFERED=1
 
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH

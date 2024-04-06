@@ -20,6 +20,8 @@ WORKDIR /app
 
 COPY ./startup.sh /
 
+ENV PYTHONUNBUFFERED=1
+
 ENV VIRTUAL_ENV /env
 ENV PATH /env/bin:$PATH
 

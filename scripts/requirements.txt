@@ -1,0 +1,12 @@
+jmespath==1.0.1
+packaging==23.2
+python-dateutil==2.8.2
+pytz==2023.3.post1
+s3transfer==0.10.0
+six==1.16.0
+sqlparse==0.4.4
+urllib3==1.26.0
+psycopg2-binary>=2.9
+spotipy==2.22.1
+python-dotenv==0.19.0
+requests==2.26.0
