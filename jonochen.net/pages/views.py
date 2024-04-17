@@ -3,7 +3,6 @@ from django.http import FileResponse, HttpResponseNotFound, JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
 import os
-from .models import Song, SongOfDay
 # Create your views here.
 
 
@@ -21,8 +20,5 @@ def resume(request):
         return response
     else:
         return HttpResponseNotFound("No Resume file found")
-
-def playlistle(request):
-    return render(request, "pages/playlistle.html")
     
 

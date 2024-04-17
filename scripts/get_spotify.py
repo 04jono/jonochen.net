@@ -131,13 +131,13 @@ if __name__ == '__main__':
         print("You are connected to - ", record,"\n")
 
         #Insert into database
-        insert_query = 'INSERT INTO song (song_name, artist, release_year, album_url, database_uri) VALUES %s'
+        insert_query = 'INSERT INTO playlistle_song (song_name, artist, release_year, album_url, database_uri) VALUES %s'
         psycopg2.extras.execute_values (
             cursor, insert_query, row_data, template=None, page_size=100
         )
         connection.commit()
         count = cursor.rowcount
-        print (count, "Record inserted successfully into mobile table")
+        print (count, "Record inserted successfully into table")
 
     except (Exception, Error) as error :
         print ("Error while connecting to PostgreSQL", error)
