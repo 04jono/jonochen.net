@@ -7,7 +7,7 @@ from .models import Song, SongOfDay
 # Create your views here.
 
 def playlistle(request):
-    return render(request, "pages/playlistle.html")
+    return render(request, "playlistle/playlistle.html")
 
 @csrf_protect
 def submit_song(request):
@@ -18,7 +18,7 @@ def submit_song(request):
         req_song = Song.objects.filter(pk=song_string)
         if req_song.exists():
             res = {"exists": True}
-            is_song = SongOfDay.objects.filter(song=req_song)
+            is_song = SongOfDay.objects.latest('date_added').song.filter(pk=song_string)
             if is_song.exists():
                 res["is_song"] = True
             else:
