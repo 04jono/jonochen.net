@@ -27,7 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-g$rao&mt_gosb%&**3lkk)2&$h(s)2b#0h13-w^575px!yv_ej')
-DEBUG = os.getenv('DEBUG', True)
+
+# DEBUG on by default
+if os.getenv('DEBUG') == 'False':
+    DEBUG = False
+else:
+    DEBUG = True
+
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 # Application definition
@@ -138,3 +144,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

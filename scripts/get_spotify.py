@@ -101,15 +101,20 @@ if __name__ == '__main__':
                 track_artist = track['track']['name'].translate(str.maketrans('', '', string.punctuation))
 
                 file_name = track_artist.replace(' ', '_') + '_' + track_name.replace(' ', '_') + ".mp3"
+                song_identifier = track['track']['artists'][0]['name'] + " - " + track['track']['name']
+
                 dest = folder_path + file_name
                 download_mp3_from_cdn(preview, dest)
-                if file_name not in duplicate_keys:
+
+                if song_identifier not in duplicate_keys:
                     row_data.append((track['track']['name'], 
                                  track['track']['artists'][0]['name'], 
                                  track['track']['album']['release_date'][:4], 
-                                 track['track']['album']['images'][0]['url'], 
-                                 file_name))
-                    duplicate_keys.add(file_name)
+                                 track['track']['album']['images'][0]['url'],
+                                 file_name,
+                                 playlist['name'],
+                                 song_identifier))
+                    duplicate_keys.add(song_identifier)
                 
                 print(dest)
         
@@ -131,7 +136,7 @@ if __name__ == '__main__':
         print("You are connected to - ", record,"\n")
 
         #Insert into database
-        insert_query = 'INSERT INTO playlistle_song (song_name, artist, release_year, album_url, database_uri) VALUES %s'
+        insert_query = 'INSERT INTO playlistle_song (song_name, artist, release_year, album_url, database_uri, playlist, song_identifier) VALUES %s'
         psycopg2.extras.execute_values (
             cursor, insert_query, row_data, template=None, page_size=100
         )

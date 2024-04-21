@@ -16,24 +16,55 @@
         } 
     </script>
     <script>
+        function getSongOfDay() {
+            $.ajax({
+                type: 'GET', url: 'get_songofday', beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }, success: function (response) {
+                    const song_name = response['song_name'];
+                    const artist = response['artist'];
+                    const release_year = response['release_year'];
+                    const album_url = response['album_url'];
+                    const playlist = response['playlist'];
+                    const song_identifier = response['song_identifier'];
+                    $('.hints').html('Song of the day: ' + song_html + ' by ' + artist_html);
+                }
+            });
+        }
+    </script>
+    <script>
         <!-- Ajax script to POST to /song_submit endpoint -->
         $(document).ready(function () {
             $('#song_form').submit(function (event) {
                 event.preventDefault();
-                var song_guess = $('#song_guess').val();
+                const song_guess = $('#song_guess').val();
                 // Determine which button was clicked
-                var button_clicked = $('button[name="button"]:focus').val();
+                const button_clicked = $('button[name="button"]:focus').val();
 
                 if (button_clicked === 'Submit') {
                     $.ajax({
                         type: 'POST', url: 'song_submit', beforeSend: function (xhr, settings) {
                             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                         }, data: { song: song_guess, }, success: function
-                            (response) { console.log(response); }
+                            (response) { 
+                                if (response['is_song']) {
+                                    alert('Song found!'); 
+                                    $('#song_form')[0].reset();
+                                } else {
+                                    // Increment guess number in localStorage
+                                    const guess_num = localStorage.getItem('guess_num');
+                                    if(guess_num === null) {
+                                        localStorage.setItem('guess_num', '1');
+                                    } else {
+                                        localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
+                                    }
+                                }
+                            }
                     });
                 } else if (button_clicked === 'Skip') { $('#song_form')[0].reset(); }
             });
-        }); </script>
+        });
+    </script>
 </head>
 
 <body>
@@ -42,6 +73,10 @@
             <div class="heading">playlistle</div>
             How well do you know Arsch Aim?
         </div>
+
+        <audio controls id="player">
+            <source src="" type="audio/wav">
+        </audio>
 
         <div class="guess_form">
             <form id="song_form" method="post">

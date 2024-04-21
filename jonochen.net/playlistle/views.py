@@ -9,17 +9,30 @@ from .models import Song, SongOfDay
 def playlistle(request):
     return render(request, "playlistle/playlistle.html")
 
+def songofday_modal(request):
+    return render(request, "playlistle/songofday_modal.html")
+
+def get_songofday() -> dict:
+    '''Get the song of the day'''
+    songofday = SongOfDay.objects.latest('date_added').song
+    return {"song_name": songofday.song_name, 
+            "artist": songofday.artist, 
+            "release_year": songofday.release_year, 
+            "album_url": songofday.album_url, 
+            "playlist": songofday.playlist,
+            "song_identifier": songofday.song_identifier}
+
+
 @csrf_protect
 def submit_song(request):
     '''Playlistle form: Submit a song guess'''
     if request.method == 'POST':
         song_string = request.POST.get('song')
         ##if song exists
-        req_song = Song.objects.filter(pk=song_string)
+        req_song = Song.objects.filter(song_identifier=song_string)
         if req_song.exists():
             res = {"exists": True}
-            is_song = SongOfDay.objects.latest('date_added').song.filter(pk=song_string)
-            if is_song.exists():
+            if SongOfDay.objects.latest('date_added').song.song_identifier == str(song_string):
                 res["is_song"] = True
             else:
                 res["is_song"] = False
