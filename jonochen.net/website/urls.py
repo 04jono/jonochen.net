@@ -23,4 +23,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("pages.urls")),
     path('playlistle/', include("playlistle.urls"))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
