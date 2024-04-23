@@ -33,7 +33,7 @@ def get_clipped_song(request):
 
 def songofday_modal(request):
     '''Render modal with the song of the day'''
-    return render(request, "playlistle/songofday_modal.html", get_songofday())
+    return render(request, "playlistle/songofday_modal.html")
 
 def get_songofday() -> dict:
     '''Get the song of the day'''
