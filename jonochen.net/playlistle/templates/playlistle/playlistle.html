@@ -19,7 +19,7 @@
     <script>
         function getSongClip(length) {
             $.ajax({
-                type: 'GET', url: 'get_clipped_song', beforeSend: function (xhr, settings) {
+                type: 'GET', url: 'song_clip', beforeSend: function (xhr, settings) {
                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                 }, data: { 'length': length, }, success: function (response) {
                     var p = document.getElementById('player'); 
