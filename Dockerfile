@@ -8,12 +8,16 @@ RUN set -ex \
     && /env/bin/pip install --upgrade pip \
     && /env/bin/pip install --no-cache-dir -r /app/requirements.txt \
     && runDeps="$(scanelf --needed --nobanner --recursive /env \
-        | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-        | sort -u \
-        | xargs -r apk info --installed \
-        | sort -u)" \
+    | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+    | sort -u \
+    | xargs -r apk info --installed \
+    | sort -u)" \
     && apk add --virtual rundeps $runDeps \
     && apk del .build-deps
+
+RUN apt-get -y update \
+    && apt-get -y upgrade \
+    && apt-get install -y --no-install-recommends ffmpeg
 
 ADD jonochen.net /app
 WORKDIR /app

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import FileResponse, HttpResponseNotFound, JsonResponse
+from django.http import FileResponse, HttpResponseNotFound, JsonResponse, HttpResponseServerError
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
 import os
@@ -14,11 +14,15 @@ def playlistle(request):
 def get_clipped_song(request):
     '''Get the song of the day, clipped to length [0, 30] seconds'''
     if request.method == 'GET':
-        songofday = SongOfDay.objects.latest('date_added').song
-        input_file = os.path.join(settings.MEDIA_ROOT, songofday.database_uri)
-        length = int(request.GET.get('length'))
-        out, err = ffmpeg.input(input_file, t=length).output("pipe:").run(capture_stdout=True)
-        return FileResponse(out, content_type='audio/mp3')
+        try:
+            songofday = SongOfDay.objects.latest('date_added').song
+            input_file = os.path.join(settings.MEDIA_ROOT, songofday.database_uri)
+            length = int(request.GET.get('length'))
+            out, err = ffmpeg.input(input_file, t=length).output("pipe:").run(capture_stdout=True)
+            return FileResponse(out, content_type='audio/mp3')
+        except Exception as e:
+            print(e)
+            return HttpResponseServerError("Error processing song")
     else:
         return HttpResponseNotFound("No GET request found")
     
