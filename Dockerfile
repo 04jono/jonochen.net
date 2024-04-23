@@ -15,9 +15,7 @@ RUN set -ex \
     && apk add --virtual rundeps $runDeps \
     && apk del .build-deps
 
-RUN apt-get -y update \
-    && apt-get -y upgrade \
-    && apt-get install -y --no-install-recommends ffmpeg
+RUN apk update && apk upgrade && apk add --no-cache ffmpeg
 
 ADD jonochen.net /app
 WORKDIR /app
