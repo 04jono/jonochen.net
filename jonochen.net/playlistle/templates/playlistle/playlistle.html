@@ -1,6 +1,7 @@
 {% load static %}
 
 <head>
+    <title>Playlistle - jonochen.net</title>
     <link type="text/css" href="{% static 'playlistle/playlistle.css' %}" rel="stylesheet">
     <link type="text/css" rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -16,18 +17,25 @@
         } 
     </script>
     <script>
+        function getSongClip(length) {
+            $.ajax({
+                type: 'GET', url: 'get_clipped_song', beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }, data: { 'length': length, }, success: function (response) {
+                    var p = document.getElementById('player'); 
+                    p.src = `https://jonochen.net/playlistle/song_clip?length=${length}`;
+                    p.load();
+                }
+            });
+        }
+    </script>
+    <script>
         function getSongOfDay() {
             $.ajax({
                 type: 'GET', url: 'get_songofday', beforeSend: function (xhr, settings) {
                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                 }, success: function (response) {
-                    const song_name = response['song_name'];
-                    const artist = response['artist'];
-                    const release_year = response['release_year'];
-                    const album_url = response['album_url'];
-                    const playlist = response['playlist'];
-                    const song_identifier = response['song_identifier'];
-                    $('.hints').html('Song of the day: ' + song_html + ' by ' + artist_html);
+                    
                 }
             });
         }
@@ -47,9 +55,9 @@
                             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                         }, data: { song: song_guess, }, success: function
                             (response) { 
+                                $('#song_form')[0].reset();
                                 if (response['is_song']) {
                                     alert('Song found!'); 
-                                    $('#song_form')[0].reset();
                                 } else {
                                     // Increment guess number in localStorage
                                     const guess_num = localStorage.getItem('guess_num');
@@ -58,12 +66,34 @@
                                     } else {
                                         localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
                                     }
+                                    const new_guess_num = localStorage.getItem('guess_num');
+                                    getSongClip(2 + parseInt(new_guess_num) * 3);
                                 }
                             }
                     });
-                } else if (button_clicked === 'Skip') { $('#song_form')[0].reset(); }
+                } else if (button_clicked === 'Skip') { 
+                    $('#song_form')[0].reset();
+                    // Increment guess number in localStorage
+                    const guess_num = localStorage.getItem('guess_num');
+                    if(guess_num === null) {
+                        localStorage.setItem('guess_num', '1');
+                    } else {
+                        localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
+                    }
+                 }
             });
         });
+    </script>
+    <script>
+        const guess_num = localStorage.getItem('guess_num');
+        var length = 2;
+        if(guess_num !== null) {
+            length = 2 + parseInt(guess_num) * 3;
+        }
+        $(document).ready( function () {
+            getSongClip(length);
+        });
+
     </script>
 </head>
 
@@ -75,7 +105,7 @@
         </div>
 
         <audio controls id="player">
-            <source src="" type="audio/wav">
+            <source src="https://jonochen.net/playlistle/song_clip?length=1" type="audio/mp3">
         </audio>
 
         <div class="guess_form">

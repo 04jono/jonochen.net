@@ -4,14 +4,28 @@ from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
 import os
 from .models import Song, SongOfDay
+import ffmpeg
 # Create your views here.
 
 def playlistle(request):
     return render(request, "playlistle/playlistle.html")
 
+@csrf_protect
+def get_clipped_song(request):
+    '''Get the song of the day, clipped to length [0, 30] seconds'''
+    if request.method == 'GET':
+        songofday = SongOfDay.objects.latest('date_added').song
+        input_file = os.path.join(settings.MEDIA_ROOT, songofday.database_uri)
+        length = int(request.GET.get('length'))
+        out, err = ffmpeg.input(input_file, t=length).output("pipe:").run(capture_stdout=True)
+        return FileResponse(out, content_type='audio/mp3')
+    else:
+        return HttpResponseNotFound("No GET request found")
+    
 def songofday_modal(request):
     return render(request, "playlistle/songofday_modal.html")
 
+@csrf_protect
 def get_songofday() -> dict:
     '''Get the song of the day'''
     songofday = SongOfDay.objects.latest('date_added').song
