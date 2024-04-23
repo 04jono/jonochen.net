@@ -30,11 +30,11 @@ def get_clipped_song(request):
             return HttpResponseServerError("Error processing song")
     else:
         return HttpResponseNotFound("No GET request found")
-    
-def songofday_modal(request):
-    return render(request, "playlistle/songofday_modal.html")
 
-@csrf_protect
+def songofday_modal(request):
+    '''Render modal with the song of the day'''
+    return render(request, "playlistle/songofday_modal.html", get_songofday())
+
 def get_songofday() -> dict:
     '''Get the song of the day'''
     songofday = SongOfDay.objects.latest('date_added').song
