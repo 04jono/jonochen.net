@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import FileResponse, HttpResponseNotFound, JsonResponse, HttpResponseServerError
+from django.http import FileResponse, HttpResponseNotFound, JsonResponse, HttpResponseServerError, HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
 import os
@@ -18,8 +18,13 @@ def get_clipped_song(request):
             songofday = SongOfDay.objects.latest('date_added').song
             input_file = os.path.join(settings.MEDIA_ROOT, songofday.database_uri)
             length = int(request.GET.get('length'))
-            out, err = ffmpeg.input(input_file, t=length).output("pipe:").run(capture_stdout=True)
-            return FileResponse(out, content_type='audio/mp3')
+            out, err = ffmpeg.input(input_file, t=length).output("pipe:", format="mp3").run(capture_stdout=True)
+
+            response = HttpResponse()
+            response.write(out)
+            response['Content-Type'] ='audio/mp3'
+            response['Content-Length'] = len(out)
+            return response
         except Exception as e:
             print(e)
             return HttpResponseServerError("Error processing song")
