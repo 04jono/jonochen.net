@@ -31,10 +31,6 @@ def get_clipped_song(request):
     else:
         return HttpResponseNotFound("No GET request found")
 
-def songofday_modal(request):
-    '''Render modal with the song of the day'''
-    return render(request, "playlistle/songofday_modal.html")
-
 def get_songofday() -> dict:
     '''Get the song of the day'''
     songofday = SongOfDay.objects.latest('date_added').song

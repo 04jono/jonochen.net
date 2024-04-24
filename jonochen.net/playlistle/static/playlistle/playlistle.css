@@ -26,3 +26,10 @@
     margin-top: 50px;
     margin-bottom: 50px
 }
+
+.headers {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
