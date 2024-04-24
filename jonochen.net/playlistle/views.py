@@ -8,7 +8,7 @@ import ffmpeg
 # Create your views here.
 
 def playlistle(request):
-    return render(request, "playlistle/playlistle.html")
+    return render(request, "playlistle/playlistle.html", get_songofday())
 
 @csrf_protect
 def get_clipped_song(request):

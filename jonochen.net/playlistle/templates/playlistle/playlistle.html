@@ -134,8 +134,8 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="myModalLabel">Modal title</h5>
+        <div class="modal-header" style="display:flex;flex-direction:row;justify-content:space-between;">
+          <h5 class="modal-title" id="myModalLabel">The answer was: {{ song_identifier }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -144,8 +144,7 @@
           ...
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-primary">Copy to clipboard</button>
         </div>
       </div>
     </div>
