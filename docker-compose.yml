@@ -20,7 +20,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     expose:
-      - "5432:5432"
+      - "5432"
 
   spotify:
     env_file:
