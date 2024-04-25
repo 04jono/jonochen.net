@@ -11,6 +11,24 @@ def playlistle(request):
     return render(request, "playlistle/playlistle.html", get_songofday())
 
 @csrf_protect
+def get_all_song_identifiers(request):
+    '''Get all song identifiers'''
+    if request.method == 'GET':
+        song_identifiers = [song.song_identifier for song in Song.objects.all()]
+        return JsonResponse({"song_identifiers": song_identifiers})
+    else:
+        return HttpResponseNotFound("No GET request found")
+
+@csrf_protect
+def get_song_hash(request):
+    '''Get the song of the day hash'''
+    if request.method == 'GET':
+        songofday = SongOfDay.objects.latest('date_added').song
+        return JsonResponse({"song_hash": hash(songofday.song_identifier)})
+    else:
+        return HttpResponseNotFound("No GET request found")
+
+@csrf_protect
 def get_clipped_song(request):
     '''Get the song of the day, clipped to length [0, 30] seconds'''
     if request.method == 'GET':
