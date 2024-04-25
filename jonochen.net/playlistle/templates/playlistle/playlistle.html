@@ -14,7 +14,7 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         function openModal() {
-            if(localStorage.getitem("song_found") === null) {
+            if(localStorage.getItem("song_found") === null) {
                 $('.modal-body').html("Better luck next time!");
             } else {
                 $('.modal-body').html("Guessed in " + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString());
@@ -110,8 +110,8 @@
                         openModal();
                     } else {
                         localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
-                        const new_guess_num = localStorage.getItem('guess_num');
                     }
+                    const new_guess_num = localStorage.getItem('guess_num');
                     getSongClip(2 + parseInt(new_guess_num) * 3);
                  }
             });
