@@ -42,6 +42,7 @@
                     if(localStorage.getItem(response['song_hash']) === null) {
                         localStorage.clear();
                         localStorage.setItem(response['song_hash'], '1');
+                        location.reload(true);
                     }
                 }
         });
