@@ -99,7 +99,7 @@
                                     if(guess_num === null) {
                                         localStorage.setItem('guess_num', '1');
                                     } else if (parseInt(guess_num) > 5) {
-                                        endGame("0")
+                                        endGame("0");
                                     } else {
                                         localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
                                     }
@@ -116,7 +116,7 @@
                         localStorage.setItem('guess_num', '1');
                     } 
                     else if (parseInt(guess_num) > 5){
-                        openModal();
+                        endGame("0");
                     } else {
                         localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
                     }
