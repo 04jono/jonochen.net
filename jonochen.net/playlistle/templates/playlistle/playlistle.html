@@ -14,12 +14,21 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         function openModal() {
-            if(localStorage.getItem("song_found") === null) {
+            if(localStorage.getItem("song_found") === 0 || localStorage.getItem("song_found") === null){
                 $('.modal-body').html("Better luck next time!");
             } else {
                 $('.modal-body').html("Guessed in " + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString());
             }
             $('#myModal').modal('show');
+        }
+    </script>
+    <script>
+        function endGame(exitCode) {
+            localStorage.setItem("song_found", str(exitCode));
+            document.getElementById('openModalBtn').style.visibility = 'visible';
+            $("#button_submit").prop("disabled", true);
+            $("#button_skip").prop("disabled", true);
+            openModal();
         }
     </script>
     <script>
@@ -79,8 +88,7 @@
                             (response) { 
                                 $('#song_form')[0].reset();
                                 if (response['is_song']) {
-                                    localStorage.setItem("song_found", "1");
-                                    openModal();
+                                    endGame(1);
                                 } else {
                                     if(response['exists'] = false) {
                                         alert("Song not found. Try again.");
@@ -91,7 +99,7 @@
                                     if(guess_num === null) {
                                         localStorage.setItem('guess_num', '1');
                                     } else if (parseInt(guess_num) > 5) {
-                                        openModal();
+                                        endGame(0)
                                     } else {
                                         localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
                                     }
@@ -161,8 +169,8 @@
             <form id="song_form" method="post">
                 {% csrf_token %}
                 <input id="song_guess" placeholder="Search for a song">
-                <button type="submit" name="button" value="Submit">Submit</button>
-                <button type="submit" name="button" value="Skip">Skip</button>
+                <button id="button_submit" type="submit" name="button" value="Submit">Submit</button>
+                <button id="button_skip" type="submit" name="button" value="Skip">Skip</button>
             </form>
         </div>
     </div>
@@ -176,6 +184,8 @@
             document.getElementById('openModalBtn').style.visibility = 'hidden';
         } else {
             document.getElementById('openModalBtn').style.visibility = 'visible';
+            $("#button_submit").prop("disabled", true);
+            $("#button_skip").prop("disabled", true);
         }
         });
     </script>
