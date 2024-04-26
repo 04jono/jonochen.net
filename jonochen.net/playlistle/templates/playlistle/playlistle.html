@@ -14,7 +14,7 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         function openModal() {
-            if(localStorage.getItem("song_found") === 0 || localStorage.getItem("song_found") === null){
+            if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
                 $('.modal-body').html("Better luck next time!");
             } else {
                 $('.modal-body').html("Guessed in " + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString());
