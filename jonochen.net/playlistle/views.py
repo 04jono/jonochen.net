@@ -57,7 +57,8 @@ def get_songofday() -> dict:
             "release_year": songofday.release_year, 
             "album_url": songofday.album_url, 
             "playlist": songofday.playlist,
-            "song_identifier": songofday.song_identifier}
+            "song_identifier": songofday.song_identifier,
+            "date_added": SongOfDay.objects.latest('date_added').date_added.strftime("%Y-%m-%d")}
 
 
 @csrf_protect

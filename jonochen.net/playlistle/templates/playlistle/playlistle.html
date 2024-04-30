@@ -17,7 +17,8 @@
             if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
                 $('.modal-body').html("Better luck next time!");
             } else {
-                $('.modal-body').html("Guessed in " + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString());
+                $('.modal-body').html("Guessed in " + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString() 
+                    + "<br>Playlist: {{ playlist }}" + "<br>");
             }
             $('#myModal').modal('show');
         }
@@ -203,6 +204,16 @@
             }
         });
     </script>
+    <script>
+        $('#copy').click(function() {
+            if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
+                navigator.clipboard.writeText("{{ date_added }}\njonochen.net/playlistle\nFailed to guess correctly");
+            } else {
+                navigator.clipboard.writeText("{{ date_added }}\njonochen.net/playlistle\nGuessed in " 
+                    + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString());
+            }
+        });
+    </script>
 </body>
 
 <!-- Modal -->
@@ -222,7 +233,7 @@
           ...
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Copy to clipboard</button>
+          <button id="copy" type="button" class="btn btn-primary">Copy to clipboard</button>
         </div>
       </div>
     </div>
