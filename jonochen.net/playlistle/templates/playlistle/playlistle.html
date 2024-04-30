@@ -205,13 +205,15 @@
         });
     </script>
     <script>
-        $('#copy').click(function() {
-            if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
+        $document.ready(function() {
+            $('#copy').click(function() {
+                if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
                 navigator.clipboard.writeText("{{ date_added }}\njonochen.net/playlistle\nFailed to guess correctly");
-            } else {
+                } else {
                 navigator.clipboard.writeText("{{ date_added }}\njonochen.net/playlistle\nGuessed in " 
                     + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString());
-            }
+                }
+            });
         });
     </script>
 </body>
@@ -225,9 +227,6 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        </div>
-        <div>
-            Playlist: {{ playlist }}
         </div>
         <div class="modal-body">
           ...
