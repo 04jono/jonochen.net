@@ -205,9 +205,8 @@
         });
     </script>
     <script>
-        $document.ready(function() {
+        $(document).ready(function() {
             $('#copy').click(function() {
-                console.log("Copying to clipboard");
                 if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
                 navigator.clipboard.writeText("{{ date_added }}\njonochen.net/playlistle\nFailed to guess correctly");
                 } else {
