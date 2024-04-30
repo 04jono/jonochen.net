@@ -15,7 +15,7 @@
     <script>
         function openModal() {
             if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
-                $('.modal-body').html("Better luck next time!");
+                $('.modal-body').html("Better luck next time!<br>Playlist: {{ playlist }}" + "<br>");
             } else {
                 $('.modal-body').html("Guessed in " + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString() 
                     + "<br>Playlist: {{ playlist }}" + "<br>");
@@ -207,6 +207,7 @@
     <script>
         $document.ready(function() {
             $('#copy').click(function() {
+                console.log("Copying to clipboard");
                 if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
                 navigator.clipboard.writeText("{{ date_added }}\njonochen.net/playlistle\nFailed to guess correctly");
                 } else {
