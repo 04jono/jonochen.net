@@ -3,5 +3,6 @@ from pages import views
 
 urlpatterns = [
     path("", views.home, name='home'),
+    path("robots.txt", views.robots, name='robots'),
     path("resume", views.resume, name='resume'),
 ]

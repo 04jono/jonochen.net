@@ -1,10 +1,24 @@
 from django.shortcuts import render
-from django.http import FileResponse, HttpResponseNotFound, JsonResponse
+from django.http import FileResponse, HttpResponseNotFound, JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.conf import settings
+from django.views.decorators.http import require_GET
 import os
 # Create your views here.
 
+ROBOTS_TXT = """\
+User-Agent: *
+Disallow: /resume
+Disallow: /admin
+Disallow: /playlistle
+
+User-agent: GPTBot
+Disallow: /
+"""
+
+@require_GET
+def robots(request):
+    return HttpResponse(ROBOTS_TXT, content_type="text/plain")
 
 def home(request):
     return render(request, "pages/home.html")
