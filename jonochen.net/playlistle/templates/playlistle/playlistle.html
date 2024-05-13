@@ -203,7 +203,11 @@
                 song_identifiers = response['song_identifiers'];
                 $( function() {
                     $( "#song_guess" ).autocomplete({
-                        source: song_identifiers
+                        source: function(request, response) {
+                            var results = $.ui.autocomplete.filter(song_identifiers, request.term);
+
+                            response(results.slice(0, 10));
+                        }
                     });
                 } );
             }
