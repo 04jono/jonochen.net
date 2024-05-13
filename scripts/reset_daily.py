@@ -27,6 +27,7 @@ def reset_daily():
             last_date = latest_song[0]
             today_date = datetime.datetime.now().date()
             song_date = datetime.datetime.fromtimestamp(last_date).date()
+            print(latest_song)
             print(f"Last date: {song_date}")
             print(f"Today date: {today_date}")
             if today_date != song_date:
