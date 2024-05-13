@@ -27,6 +27,8 @@ def reset_daily():
             last_date = latest_song[0]
             today_date = datetime.datetime.now().date()
             song_date = datetime.datetime.fromtimestamp(last_date).date()
+            print(f"Last date: {song_date}")
+            print(f"Today date: {today_date}")
             if today_date != song_date:
                 cursor.execute("SELECT * FROM playlistle_song ORDER BY RANDOM() LIMIT 1")
                 random_song = cursor.fetchone()
