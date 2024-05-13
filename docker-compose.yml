@@ -32,6 +32,14 @@ services:
       - song-data:/app/data:rw
     command: python get_spotify.py --filter arsch
 
+  reset-daily:
+    env_file:
+      - .env
+    build:
+      context: ./scripts
+      dockerfile: ./Dockerfile
+    command: python reset_daily.py
+
 volumes:
   song-data:
   pgdata:
