@@ -77,9 +77,20 @@
         <!-- Ajax script to POST to /song_submit endpoint -->
         $(document).ready(function () {
             $('#button_submit').on('click touchstart', function () {
+                $('#song_form').submit();
+                return false;
+            });
+
+        $('#song_form').submit(function (event) {
+            event.preventDefault();
+            const song_guess = $('#song_guess').val();
+            // Determine which button was clicked
+            const button_clicked = $('button[name="button"]:focus').val();
+
+            if (button_clicked === 'Submit') {
                 $.ajax({
-                        type: 'POST', url: 'song_submit', beforeSend: function (xhr, settings) {
-                            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    type: 'POST', url: 'song_submit', beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                         }, data: { song: song_guess, }, success: function
                             (response) { 
                                 $('#song_form')[0].reset();
@@ -104,8 +115,9 @@
                                 }
                             }
                     });
-                return false;
-            });
+
+            }
+        });
 
             $('#button_skip').on('click touchstart', function () {
                 $('#song_form')[0].reset();
@@ -169,7 +181,7 @@
                 {% csrf_token %}
                 <input id="song_guess" placeholder="Search for a song">
                 <button id="button_submit" type="submit" name="button" value="Submit">Submit</button>
-                <button id="button_skip" type="submit" name="button" value="Skip">Skip</button>
+                <button id="button_skip" name="button" value="Skip">Skip</button>
             </form>
         </div>
     </div>
