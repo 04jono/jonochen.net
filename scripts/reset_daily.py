@@ -26,11 +26,11 @@ def reset_daily():
             latest_song = cursor.fetchone()
             last_date = latest_song[0]
 
-            if last_date != datetime.date.today():
+            if last_date.date() != datetime.datetime.now().date():
                 cursor.execute("SELECT * FROM playlistle_song ORDER BY RANDOM() LIMIT 1")
                 random_song = cursor.fetchone()
                 insert_query = 'INSERT INTO playlistle_songofday (date_added, song_id) VALUES (%s, %s)'
-                cursor.execute(insert_query, (datetime.date.today(), random_song[6]))
+                cursor.execute(insert_query, (datetime.datetime.now().date(), random_song[6]))
                 connection.commit()
                 print(f"Song of the day {random_song[6]} inserted successfully")
 
