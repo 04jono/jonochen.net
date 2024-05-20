@@ -15,13 +15,25 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         function openModal() {
-            if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
-                $('.modal-body').html("Better luck next time!<br>Playlist: {{ playlist }}" + "<br>");
-            } else {
-                $('.modal-body').html("Guessed in " + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString() 
+            updateScore();
+            $('.modal-body').html($('.score').html().toString()
                     + "<br>Playlist: {{ playlist }}" + "<br>");
-            }
             $('#myModal').modal('show');
+        }
+    </script>
+    <script>
+        function updateScore() {
+            var totalBoxes = 7;
+            const numTries = parseInt(localStorage.getItem("guess_num") ?? "0");
+            totalBoxes -= numTries;
+            if(localStorage.getItem("song_found") === "1") {
+                $('.score').html("🟥".repeat(numTries) + "🟩");
+            }
+            else if(localStorage.getItem("song_found") === "0") {
+                $('.score').html("🟥".repeat(7));
+            } else {
+                $('.score').html("🟥".repeat(numTries) +  "⬛".repeat(totalBoxes));
+            }
         }
     </script>
     <script>
@@ -55,6 +67,7 @@
                         localStorage.setItem(response['song_hash'], '1');
                         location.reload(true);
                     }
+                    updateScore();
                 }
         });
     });
@@ -110,6 +123,7 @@
                                     const new_guess_num = localStorage.getItem('guess_num');
                                     getSongClip(2 + parseInt(new_guess_num) * 3);
                                 }
+                                updateScore();
                             }
                  });
             });
@@ -128,6 +142,7 @@
                     }
                     const new_guess_num = localStorage.getItem('guess_num');
                     getSongClip(2 + parseInt(new_guess_num) * 3);
+                    updateScore();
                 return false;
             });
         });
@@ -150,40 +165,6 @@
             });
         });
     </script>
-        
-</head>
-
-<body>
-
-    <div class="container">
-        <div class="headers">
-            <button type="button" id="openModalBtn">
-                <i class="fa-solid fa-share"></i>
-            </button>
-        </div>
-
-        <div class="title">
-            <div class="heading">playlistle</div>
-            How well do you know Arsch Aim?
-        </div>
-
-        <audio controls id="player">
-            <source src="" type="audio/mp3">
-        </audio>
-
-        <div class="guess_form">
-            <form id="song_form" method="post">
-                {% csrf_token %}
-                <input id="song_guess" placeholder="Search for a song">
-                <button id="button_submit" type="submit" name="button" value="Submit">Submit</button>
-                <button id="button_skip" name="button" value="Skip">Skip</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("song_found") === null) {
@@ -216,15 +197,43 @@
     <script>
         $(document).ready(function() {
             $('#copy').click(function() {
-                if(localStorage.getItem("song_found") === "0" || localStorage.getItem("song_found") === null){
-                navigator.clipboard.writeText("{{ date_added }}\njonochen.net/playlistle\nFailed to guess correctly");
-                } else {
-                navigator.clipboard.writeText("{{ date_added }}\njonochen.net/playlistle\nGuessed in " 
-                    + (parseInt(localStorage.getItem('guess_num') ?? '0') + 1).toString());
-                }
+                navigator.clipboard.writeText("{{ date_added }}\nhttps://jonochen.net/playlistle/\n" + $('.score').html().toString());
             });
         });
     </script>
+        
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="headers">
+            <button type="button" id="openModalBtn">
+                <i class="fa-solid fa-share"></i>
+            </button>
+        </div>
+
+        <div class="title">
+            <div class="heading">playlistle</div>
+            <div class="score"></div>
+        </div>
+
+        <audio controls id="player">
+            <source src="" type="audio/mp3">
+        </audio>
+
+        <div class="guess_form">
+            <form id="song_form" method="post">
+                {% csrf_token %}
+                <input id="song_guess" placeholder="Search for a song">
+                <button id="button_submit" type="submit" name="button" value="Submit">Submit</button>
+                <button id="button_skip" name="button" value="Skip">Skip</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 
 <!-- Modal -->
