@@ -27,7 +27,7 @@
             const numTries = parseInt(localStorage.getItem("guess_num") ?? "0");
             totalBoxes -= numTries;
             if(localStorage.getItem("song_found") === "1") {
-                $('.score').html("🟥".repeat(numTries) + "🟩");
+                $('.score').html("🟥".repeat(numTries) + "🟩" + "⬛".repeat(totalBoxes - 1));
             }
             else if(localStorage.getItem("song_found") === "0") {
                 $('.score').html("🟥".repeat(7));
