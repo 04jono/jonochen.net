@@ -30,6 +30,7 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - song-data:/app/data:rw
+    profiles: [spotify]
     command: python get_spotify.py --filter arsch
 
   reset-daily:

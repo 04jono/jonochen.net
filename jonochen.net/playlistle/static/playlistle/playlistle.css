@@ -37,3 +37,19 @@ body {
     flex-direction: row;
     justify-content: space-between;
 }
+
+footer {
+    text-align: center;
+    padding: 5px;
+    background-color: #abbaba;
+    color: black;
+  }
+
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: darkblue;
+}
