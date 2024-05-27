@@ -90,8 +90,10 @@
         <!-- Ajax script to POST to /song_submit endpoint -->
         $(document).ready(function () {
             $('#button_submit').on('click touchstart', function () {
-                $('#song_form').submit();
-                return false;
+                if(!$('#button_submit').prop("disabled")){
+                    $('#song_form').submit();
+                    return false;
+                }
             });
 
             $('#song_form').submit(function (event) {
@@ -129,7 +131,8 @@
             });
 
             $('#button_skip').on('click touchstart', function () {
-                $('#song_form')[0].reset();
+                if(!$('#button_skip').prop("disabled")){
+                    $('#song_form')[0].reset();
                     // Increment guess number in localStorage
                     const guess_num = localStorage.getItem('guess_num');
                     if(guess_num === null) {
@@ -143,7 +146,8 @@
                     const new_guess_num = localStorage.getItem('guess_num');
                     getSongClip(2 + parseInt(new_guess_num) * 3);
                     updateScore();
-                return false;
+                    return false;
+                }
             });
         });
     </script>
