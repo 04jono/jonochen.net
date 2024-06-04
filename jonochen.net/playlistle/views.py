@@ -73,6 +73,11 @@ def submit_song(request):
             if SongOfDay.objects.latest('date_added').song.song_identifier == str(song_string):
                 res["is_song"] = True
             else:
+                if SongOfDay.objects.latest('date_added').song.artist == str(song_string).split(" - ")[0].translate(str.maketrans('', '', string.punctuation)):
+                    #Same artist
+                    res["is_artist"] = True
+                else:
+                    res["is_artist"] = False
                 res["is_song"] = False
             return JsonResponse(res)
         else:

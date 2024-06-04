@@ -72,7 +72,19 @@
         });
     });
     </script>
-
+    <script>
+        function addItemToStorage(key, item){
+            const storedList = localStorage.getItem(key);
+            if(colors === null) {
+                var list = [item];
+                localStorage.setItem(key, JSON.stringify(list));
+            } else {
+                var list = JSON.parse(storedList);
+                list.push(toString(item));
+                localStorage.setItem(key, JSON.stringify(list));
+            }
+        }
+    </script>
     <script>
         function getSongClip(length) {
             $.ajax({
@@ -99,7 +111,6 @@
             $('#song_form').submit(function (event) {
                 event.preventDefault();
                 const song_guess = $('#song_guess').val();
-                // Determine which button was clicked
                 $.ajax({
                     type: 'POST', url: 'song_submit', beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
@@ -107,22 +118,22 @@
                             (response) { 
                                 $('#song_form')[0].reset();
                                 if (response['is_song']) {
+                                    addItemToStorage("colors", "green");
+                                    addItemToStorage("guesses", toString(song_guess));
                                     endGame("1");
                                 } else {
                                     if(response['exists'] === false) {
                                         alert("Song not found. Try again.");
                                         return;
                                     }
-                                    // Increment guess number in localStorage
-                                    const guess_num = localStorage.getItem('guess_num');
-                                    if(guess_num === null) {
-                                        localStorage.setItem('guess_num', '1');
-                                    } else if (parseInt(guess_num) > 5) {
+                                    addItemToStorage("colors", "red");
+                                    addItemToStorage("guesses", song_guess);
+
+                                    const new_guesses = JSON.parse(localStorage.getItem('guesses'));
+                                    const new_guess_num = new_guesses.length;
+                                    if (new_guess_num > 6) {
                                         endGame("0");
-                                    } else {
-                                        localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
                                     }
-                                    const new_guess_num = localStorage.getItem('guess_num');
                                     getSongClip(2 + parseInt(new_guess_num) * 3);
                                 }
                                 updateScore();
@@ -134,16 +145,14 @@
                 if(!$('#button_skip').prop("disabled")){
                     $('#song_form')[0].reset();
                     // Increment guess number in localStorage
-                    const guess_num = localStorage.getItem('guess_num');
-                    if(guess_num === null) {
-                        localStorage.setItem('guess_num', '1');
-                    } 
-                    else if (parseInt(guess_num) > 5){
+                    addItemToStorage("colors", "red");
+                    addItemToStorage("guesses", "Skipped");
+
+                    const new_guesses = JSON.parse(localStorage.getItem('guesses'));
+                    const new_guess_num = new_guesses.length;
+                    if (new_guess_num > 6) {
                         endGame("0");
-                    } else {
-                        localStorage.setItem('guess_num', (parseInt(guess_num) + 1).toString());
                     }
-                    const new_guess_num = localStorage.getItem('guess_num');
                     getSongClip(2 + parseInt(new_guess_num) * 3);
                     updateScore();
                     return false;
@@ -152,9 +161,10 @@
         });
     </script>
     <script>
-        const guess_num = localStorage.getItem('guess_num');
+        const currGuesses = localStorage.getItem('guesses');
         var length = 2;
-        if(guess_num !== null) {
+        if(currGuesses !== null) {
+            const guess_num = JSON.parse(currGuesses).length;
             length = 2 + parseInt(guess_num) * 3;
         }
         $(document).ready( function () {
