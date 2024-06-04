@@ -14,9 +14,32 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
+        function makeScoreString(){
+            const color_list = JSON.parse(localStorage.getItem("colors"));
+            var score_string = "";
+            for(let i = 0; i < color_list.length; i++) {
+                switch(color_list[i]) {
+                    case "darkred":
+                        score_string += "🟥";
+                        break;
+                    case "darkorange":
+                        score_string += "🟨";
+                        break;
+                    case "darkgreen":
+                        score_string += "🟩";
+                        break;
+                    default:
+                        score_string += "⬛";
+                }
+            }
+            for(let i = color_list.length; i < 7; i++) {
+                score_string += "⬛";
+            }
+            return score_string;
+        }
         function openModal() {
             updateScore();
-            $('.modal-body').html($('.score').html().toString()
+            $('.modal-body').html(makeScoreString()
                     + "<br>Playlist: {{ playlist }}" + "<br>");
             $('#myModal').modal('show');
         }
@@ -227,7 +250,7 @@
     <script>
         $(document).ready(function() {
             $('#copy').click(function() {
-                navigator.clipboard.writeText("{{ date_added }}\nhttps://jonochen.net/playlistle/\n" + $('.score').html().toString());
+                navigator.clipboard.writeText("{{ date_added }}\nhttps://jonochen.net/playlistle/\n" + makeScoreString());
             });
         });
     </script>
