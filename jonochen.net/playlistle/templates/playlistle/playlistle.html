@@ -75,7 +75,7 @@
     <script>
         function addItemToStorage(key, item){
             const storedList = localStorage.getItem(key);
-            if(colors === null) {
+            if(storedList === null) {
                 var list = [item];
                 localStorage.setItem(key, JSON.stringify(list));
             } else {
