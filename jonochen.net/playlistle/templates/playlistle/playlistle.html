@@ -24,9 +24,23 @@
     <script>
         function updateScore() {
             var totalBoxes = 7;
-            const colors_list = localStorage.getItem("colors");
-            if(colors_list === null) {
-                
+            const colors = localStorage.getItem("colors");
+            const guesses = localStorage.getItem("guesses");
+            if(colors === null) {
+                return;
+            } else {
+                const color_list =  JSON.parse(colors);
+                const guess_list = JSON.parse(guesses);
+                const divs = document.querySelectorAll('.border-entry');
+                divs.forEach((div, index) => {
+                    if(index >= color_list.length){
+                        div.style.color = "black";
+                        div.textContent = "";
+                    } else {
+                        div.style.color = color_list[index];
+                        div.textContent = guess_list[index];
+                    }
+                });
             }
         }
     </script>
@@ -112,7 +126,7 @@
                             (response) { 
                                 $('#song_form')[0].reset();
                                 if (response['is_song']) {
-                                    addItemToStorage("colors", "green");
+                                    addItemToStorage("colors", "darkgreen");
                                     addItemToStorage("guesses", song_guess);
                                     endGame("1");
                                 } else {
@@ -121,9 +135,9 @@
                                         return;
                                     }
                                     if(response['is_artist'] === true) {
-                                        addItemToStorage("colors", "yellow");
+                                        addItemToStorage("colors", "darkorange");
                                     } else {
-                                        addItemToStorage("colors", "red");
+                                        addItemToStorage("colors", "darkred");
                                     }
                                     addItemToStorage("guesses", song_guess);
 
@@ -143,7 +157,7 @@
                 if(!$('#button_skip').prop("disabled")){
                     $('#song_form')[0].reset();
                     // Increment guess number in localStorage
-                    addItemToStorage("colors", "red");
+                    addItemToStorage("colors", "darkred");
                     addItemToStorage("guesses", "Skipped");
 
                     const new_guesses = JSON.parse(localStorage.getItem('guesses'));

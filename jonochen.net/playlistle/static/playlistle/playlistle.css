@@ -55,11 +55,13 @@ a:hover {
 }
 
 .border-entry {
-    width: 300px; /* Width of the rectangle */
-    height: 50px; /* Height of the rectangle */
-    margin: 10px;
+    width: 400px; /* Width of the rectangle */
+    height: 48px; /* Height of the rectangle */
+    margin: 4px;
     padding: 10px;
     text-align: center;
     border: 2px solid black; /* Border around the rectangle */
-    box-sizing: border-box; /* Ensure the border is included in the element's dimensions */
+    box-sizing: border-box;
+    color: black;
+    font-size: 16px;
 }
