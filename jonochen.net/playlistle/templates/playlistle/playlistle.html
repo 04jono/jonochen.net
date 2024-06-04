@@ -24,6 +24,10 @@
     <script>
         function updateScore() {
             var totalBoxes = 7;
+            const colors_list = localStorage.getItem("colors");
+            if(colors_list === null) {
+                
+            }
             const numTries = parseInt(localStorage.getItem("guess_num") ?? "0");
             totalBoxes -= numTries;
             if(localStorage.getItem("song_found") === "1") {
@@ -126,7 +130,11 @@
                                         alert("Song not found. Try again.");
                                         return;
                                     }
-                                    addItemToStorage("colors", "red");
+                                    if(response['is_artist'] === true) {
+                                        addItemToStorage("colors", "yellow");
+                                    } else {
+                                        addItemToStorage("colors", "red");
+                                    }
                                     addItemToStorage("guesses", song_guess);
 
                                     const new_guesses = JSON.parse(localStorage.getItem('guesses'));
@@ -162,9 +170,13 @@
     </script>
     <script>
         const currGuesses = localStorage.getItem('guesses');
+        const endedGame = localStorage.getItem('song_found')
         var length = 2;
         if(currGuesses !== null) {
-            const guess_num = JSON.parse(currGuesses).length;
+            var guess_num = JSON.parse(currGuesses).length;
+            if(endedGame !== null) {
+                guess_num -= 1;
+            }
             length = 2 + parseInt(guess_num) * 3;
         }
         $(document).ready( function () {
@@ -229,7 +241,15 @@
 
         <div class="title">
             <div class="heading">playlistle</div>
-            <div class="score"></div>
+            <div class="score">
+                <div class="border-entry"></div>
+                <div class="border-entry"></div>
+                <div class="border-entry"></div>
+                <div class="border-entry"></div>
+                <div class="border-entry"></div>
+                <div class="border-entry"></div>
+                <div class="border-entry"></div>
+            </div>
         </div>
 
         <audio controls id="player">

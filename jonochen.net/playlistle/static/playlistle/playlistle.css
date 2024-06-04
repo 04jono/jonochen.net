@@ -48,3 +48,18 @@ a {
 a:hover {
     color: darkblue;
 }
+
+.score {
+    display: flex;
+    flex-direction: column;  
+}
+
+.border-entry {
+    width: 300px; /* Width of the rectangle */
+    height: 50px; /* Height of the rectangle */
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    border: 2px solid black; /* Border around the rectangle */
+    box-sizing: border-box; /* Ensure the border is included in the element's dimensions */
+}
