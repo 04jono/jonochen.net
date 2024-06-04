@@ -76,7 +76,7 @@
         function addItemToStorage(key, item){
             const storedList = localStorage.getItem(key);
             if(storedList === null) {
-                var list = [item];
+                var list = [toString(item)];
                 localStorage.setItem(key, JSON.stringify(list));
             } else {
                 var list = JSON.parse(storedList);
@@ -127,7 +127,7 @@
                                         return;
                                     }
                                     addItemToStorage("colors", "red");
-                                    addItemToStorage("guesses", song_guess);
+                                    addItemToStorage("guesses", toString(song_guess));
 
                                     const new_guesses = JSON.parse(localStorage.getItem('guesses'));
                                     const new_guess_num = new_guesses.length;
