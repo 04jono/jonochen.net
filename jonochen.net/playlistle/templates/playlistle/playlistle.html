@@ -287,8 +287,10 @@
             <form id="song_form" method="post">
                 {% csrf_token %}
                 <input id="song_guess" placeholder="Search for a song">
-                <button id="button_submit" type="submit" name="button" value="Submit">Submit</button>
-                <button id="button_skip" name="button" value="Skip">Skip</button>
+                <div class="buttons">
+                    <button id="button_submit" type="submit" name="button" value="Submit">Submit</button>
+                    <button id="button_skip" name="button" value="Skip">Skip</button>
+                </div>
             </form>
         </div>
     </div>

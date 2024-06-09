@@ -24,7 +24,7 @@
 }
 
 .guess_form {
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 400px;
 }
 
@@ -51,11 +51,12 @@ a:hover {
 
 .score {
     display: flex;
-    flex-direction: column;  
+    flex-direction: column;
+    margin-bottom: 20px;  
 }
 
 .border-entry {
-    width: 400px; /* Width of the rectangle */
+    width: 450px; /* Width of the rectangle */
     height: 48px; /* Height of the rectangle */
     margin: 4px;
     padding: 10px;
@@ -67,4 +68,20 @@ a:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+#song_form {
+    display: flex;
+    flex-direction: column;
+    max-width: 450px;
+}
+
+#song_guess {
+    width: 450px;
+}
+
+.buttons {
+    width: 450px;
+    display: flex;
+    justify-content: space-between;
 }
