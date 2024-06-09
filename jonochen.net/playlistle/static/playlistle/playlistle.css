@@ -98,3 +98,11 @@ a:hover {
     background-color: rgb(185, 70, 70);
     color: white;
 }
+
+#button_submit:disabled {
+    display: none;
+}
+
+#button_submit:disabled {
+    display: none;
+}
