@@ -33,7 +33,12 @@ def get_all_song_identifiers(request):
 def get_song_hash(request):
     '''Get the song of the day hash'''
     if request.method == 'GET':
+        date = request.GET.get('date', None)
         songofday = SongOfDay.objects.latest('date_added').song
+        if date != None:
+            date_format = "%Y-%m-%d"
+            parsed_date = datetime.datetime.strptime(date, date_format).date()
+            songofday = SongOfDay.objects.filter(date_added=parsed_date).first().song
         return JsonResponse({"song_hash": hash(songofday.song_identifier)})
     else:
         return HttpResponseNotFound("No GET request found")
