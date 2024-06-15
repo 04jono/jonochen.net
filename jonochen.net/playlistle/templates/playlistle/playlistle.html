@@ -142,10 +142,11 @@
             $('#song_form').submit(function (event) {
                 event.preventDefault();
                 const song_guess = $('#song_guess').val();
+                const date = "{{ date_added }}"
                 $.ajax({
                     type: 'POST', url: 'song_submit', beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                        }, data: { song: song_guess, }, success: function
+                        }, data: { song: song_guess, date: date}, success: function
                             (response) { 
                                 $('#song_form')[0].reset();
                                 if (response['is_song']) {

@@ -43,7 +43,13 @@ def get_clipped_song(request):
     '''Get the song of the day, clipped to length [0, 30] seconds'''
     if request.method == 'GET':
         try:
+            date = request.GET.get('date', None)
             songofday = SongOfDay.objects.latest('date_added').song
+            if date != None:
+                date_format = "%Y-%m-%d"
+                parsed_date = datetime.datetime.strptime(date, date_format).date()
+                songofday = SongOfDay.objects.filter(date_added=parsed_date).first().song
+            
             input_file = os.path.join(settings.MEDIA_ROOT, songofday.database_uri)
             length = int(request.GET.get('length'))
             out, err = ffmpeg.input(input_file, t=length).output("pipe:", format="mp3").run(capture_stdout=True)
