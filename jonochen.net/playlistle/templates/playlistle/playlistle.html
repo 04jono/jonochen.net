@@ -13,6 +13,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <script>
         function makeScoreString(){
             const color_list = JSON.parse(localStorage.getItem("colors"));
@@ -39,11 +40,12 @@
         }
         function openModal() {
             updateScore();
-            $('.modal-body').html(makeScoreString()
+            $('#share-modal-body').html(makeScoreString()
                     + "<br>Playlist: {{ playlist }}" + "<br>");
-            $('#myModal').modal('show');
+            $('#share-modal').modal('show');
         }
     </script>
+
     <script>
         function updateScore() {
             var totalBoxes = 7;
@@ -67,6 +69,7 @@
             }
         }
     </script>
+
     <script>
         function endGame(exitCode) {
             localStorage.setItem("song_found", exitCode);
@@ -76,6 +79,7 @@
             openModal();
         }
     </script>
+
     <script>
         function getCookie(cname) {
             var name = cname + "=";
@@ -86,6 +90,7 @@
             } return "";
         } 
     </script>
+
     <script>
     // Reset local storage
     $(document).ready( function () {
@@ -104,6 +109,7 @@
         });
     });
     </script>
+
     <script>
         function addItemToStorage(key, item){
             const storedList = localStorage.getItem(key);
@@ -117,6 +123,7 @@
             }
         }
     </script>
+
     <script>
         function getSongClip(length) {
             $.ajax({
@@ -130,6 +137,7 @@
             });
         }
     </script>
+    
     <script>
         <!-- Ajax script to POST to /song_submit endpoint -->
         $(document).ready(function () {
@@ -197,6 +205,7 @@
             });
         });
     </script>
+
     <script>
         const currGuesses = localStorage.getItem('guesses');
         const endedGame = localStorage.getItem('song_found')
@@ -213,13 +222,18 @@
         });
 
     </script>
+
     <script>
         $(document).ready(function(){
             $("#openModalBtn").click(function(){
                 openModal();
             });
+            $("#openCalendarBtn").click(function(){
+                $('#calendar-modal').modal('show');
+            });
         });
     </script>
+
     <script>
         $(document).ready(function () {
             if (localStorage.getItem("song_found") === null) {
@@ -231,6 +245,7 @@
         }
         });
     </script>
+
     <script>
         $.ajax({
             type: 'GET', url: 'song_identifiers', beforeSend: function (xhr, settings) {
@@ -249,6 +264,7 @@
             }
         });
     </script>
+
     <script>
         $(document).ready(function() {
             $('#copy').click(function() {
@@ -256,6 +272,19 @@
             });
         });
     </script>
+
+    <script>
+        $( function() {
+          $( "#datepicker" ).datepicker({
+            buttonText: "Select date",
+            dateFormat: "yy-mm-dd",
+            onSelect : function(dateText, inst){
+                window.location.href = window.location.href.split("?")[0] + "?date=" + dateText;
+            }
+          });
+        } );
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
@@ -265,6 +294,9 @@
         <div class="headers">
             <button type="button" id="openModalBtn">
                 <i class="fa-solid fa-share"></i>
+            </button>
+            <button type="button" id="openCalendarBtn">
+                <i class="fa-solid fa-calendar-days"></i>
             </button>
         </div>
 
@@ -306,21 +338,38 @@
     </footer>
 </body>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- Share Modal -->
+<div class="modal fade" id="share-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header" style="display:flex;flex-direction:row;justify-content:space-between;">
-          <h5 class="modal-title" id="myModalLabel">The answer was: {{ song_identifier }}</h5>
+          <h5 class="modal-title">The answer was: {{ song_identifier }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="share-modal-body">
           ...
         </div>
         <div class="modal-footer">
           <button id="copy" type="button" class="btn btn-primary">Copy to clipboard</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Calendar Modal -->
+<div class="modal fade" id="calendar-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="display:flex;flex-direction:row;justify-content:space-between;">
+          <h5 class="modal-title">Playlistle Archives</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="calendar-modal-body">
+          <div id="datepicker"> </div>
         </div>
       </div>
     </div>
