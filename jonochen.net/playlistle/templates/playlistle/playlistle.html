@@ -89,10 +89,11 @@
     <script>
     // Reset local storage
     $(document).ready( function () {
+        const date = "{{ date_added }}"
         $.ajax({
                 type: 'GET', url: 'song_hash', beforeSend: function (xhr, settings) {
                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                }, success: function (response) {
+                }, data: { 'date': date }, success: function (response) {
                     if(localStorage.getItem(response['song_hash']) === null) {
                         localStorage.clear();
                         localStorage.setItem(response['song_hash'], '1');
