@@ -6,10 +6,19 @@ import os
 from .models import Song, SongOfDay
 import ffmpeg
 import string
+import datetime
+
 # Create your views here.
 
 def playlistle(request):
-    return render(request, "playlistle/playlistle.html", get_songofday())
+    date = request.GET.get('date', None)
+    if date != None:
+        try: 
+            return render(request, "playlistle/playlistle.html", get_songofday(date))
+        except ValueError:
+            return HttpResponse("There was an problem with your request", 400)
+    else:
+        return render(request, "playlistle/playlistle.html", get_songofday())
 
 @csrf_protect
 def get_all_song_identifiers(request):
@@ -50,16 +59,35 @@ def get_clipped_song(request):
     else:
         return HttpResponseNotFound("No GET request found")
 
-def get_songofday() -> dict:
-    '''Get the song of the day'''
-    songofday = SongOfDay.objects.latest('date_added').song
-    return {"song_name": songofday.song_name, 
-            "artist": songofday.artist, 
-            "release_year": songofday.release_year, 
-            "album_url": songofday.album_url, 
-            "playlist": songofday.playlist,
-            "song_identifier": songofday.song_identifier,
-            "date_added": SongOfDay.objects.latest('date_added').date_added.strftime("%Y-%m-%d")}
+def get_songofday(date : str | None = None) -> dict:
+    '''Get the song of the day. Optional: specify date string'''
+    
+    if date == None:
+        songofday = SongOfDay.objects.latest('date_added')
+        curr_song = songofday.song
+        return {"song_name": curr_song.song_name, 
+            "artist": curr_song.artist, 
+            "release_year": curr_song.release_year, 
+            "album_url": curr_song.album_url, 
+            "playlist": curr_song.playlist,
+            "song_identifier": curr_song.song_identifier,
+            "date_added": songofday.date_added.strftime("%Y-%m-%d")
+            }
+    else:
+        date_format = "%Y-%m-%d"
+        parsed_date = datetime.datetime.strptime(date, date_format).date()
+        songofday = SongOfDay.objects.filter(date_added=parsed_date).first()
+        curr_song = songofday.song
+        return {"song_name": curr_song.song_name, 
+            "artist": curr_song.artist, 
+            "release_year": curr_song.release_year, 
+            "album_url": curr_song.album_url, 
+            "playlist": curr_song.playlist,
+            "song_identifier": curr_song.song_identifier,
+            "date_added": songofday.date_added.strftime("%Y-%m-%d")
+        }
+        
+        
 
 
 @csrf_protect
