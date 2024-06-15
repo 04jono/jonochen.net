@@ -99,10 +99,21 @@ def submit_song(request):
         req_song = Song.objects.filter(song_identifier=song_string)
         if req_song.exists():
             res = {"exists": True}
-            if SongOfDay.objects.latest('date_added').song.song_identifier == str(song_string):
+            
+            date = request.GET.get('date', None)
+            songofday = SongOfDay.objects.latest('date_added').song
+            if date != None:
+                try:
+                    date_format = "%Y-%m-%d"
+                    parsed_date = datetime.datetime.strptime(date, date_format).date()
+                    songofday = SongOfDay.objects.filter(date_added=parsed_date).first().song
+                except:
+                    songofday = SongOfDay.objects.latest('date_added').song
+        
+            if songofday.song_identifier == str(song_string):
                 res["is_song"] = True
             else:
-                if SongOfDay.objects.latest('date_added').song.artist == str(song_string).split(" - ")[0].translate(str.maketrans('', '', string.punctuation)):
+                if songofday.artist == str(song_string).split(" - ")[0].translate(str.maketrans('', '', string.punctuation)):
                     #Same artist
                     res["is_artist"] = True
                 else:

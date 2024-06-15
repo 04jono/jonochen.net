@@ -118,12 +118,13 @@
     </script>
     <script>
         function getSongClip(length) {
+            const date = $('#date').text();
             $.ajax({
                 type: 'GET', url: 'song_clip', beforeSend: function (xhr, settings) {
                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                }, data: { 'length': length, }, success: function (response) {
+                }, data: { 'length': length}, success: function (response) {
                     var p = document.getElementById('player'); 
-                    p.src = `https://jonochen.net/playlistle/song_clip?length=${length}`;
+                    p.src = `https://jonochen.net/playlistle/song_clip?length=${length}&date=${date}`;
                     p.load();
                 }
             });
