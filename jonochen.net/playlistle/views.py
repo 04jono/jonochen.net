@@ -106,7 +106,7 @@ def submit_song(request):
         if req_song.exists():
             res = {"exists": True}
             
-            date = request.GET.get('date', None)
+            date = request.POST.get('date', None)
             songofday = SongOfDay.objects.latest('date_added').song
             if date != None:
                 try:
