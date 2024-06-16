@@ -106,8 +106,3 @@ a:hover {
 #button_skip:disabled {
     display: none;
 }
-
-#calendar-modal-body {
-    display: flex;
-    justify-content: center;
-}
