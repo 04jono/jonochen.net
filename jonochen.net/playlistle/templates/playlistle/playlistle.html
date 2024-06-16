@@ -278,6 +278,8 @@
           $( "#datepicker" ).datepicker({
             buttonText: "Select date",
             dateFormat: "yy-mm-dd",
+            minDate: new Date(2024, 4, 13),
+            maxDate: 0,
             onSelect : function(dateText, inst){
                 window.location.href = window.location.href.split("?")[0] + "?date=" + dateText;
             }
