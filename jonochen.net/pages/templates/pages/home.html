@@ -5,11 +5,15 @@
     <link type="text/css" href="{% static 'pages/home.css' %}" rel="stylesheet">
     <link type="text/css" rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Jonathan Chen</h1>
+    <div class="my-container">
+        <div class="img-container">
+            <img class="object-cover w-48 h-48 rounded-full" src="{% static 'pages/headshot2.jpg' %}" alt="My face">
+        </div>
+        <div class="name">Jonathan Chen</div>
         <div class="icon-list">
             <a class="icon" href="https://www.linkedin.com/in/jonathanchenq/"> <i class="fa-brands fa-linkedin"></i> <div class="icon-sub">LinkedIn</div></a>
             <a class="icon" href="https://github.com/04jono"> <i class="fa-brands fa-github"></i> <div class="icon-sub">GitHub</div></a>
@@ -17,17 +21,79 @@
         </div>
         <div class="subheading">
             about
-            <p>I am a Computer Science student at Cornell University. I'm interested in software engineering, mobile app development, and machine learning.</p>
+            <div class="subtext">I am a Computer Science student at Cornell University. I'm interested in software engineering, mobile app development, and machine learning.</div>
         </div>
         <div class="subheading">
             selected projects
-            <p>These are not necessarily my best work, but rather my favorite projects to work on.</p>
-            <ul>
-                <li><a style="font-size:18px; font-weight:normal" href="https://github.com/cuappdev/ithaca-transit-compose">Ithaca Transit<i style="font-size:20px" class="fa-solid fa-bus" aria-hidden="true"></i></a>
-                </li>
-                <li><a style="font-size:18px; font-weight:normal" href="./playlistle">Playlistle<i style="font-size:20px" class="fa-solid fa-music"></i></a>
-                </li>
-            </ul>
+            <div class="subtext">These are a sample of my favorite projects to work on.</div>
+            <div class="container mx-auto my-8">
+                <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3" style="max-width:800px">
+
+                    <!-- Vertical card -->
+                    <div class="max-w-xs bg-slate-800 hover:bg-gray-900 border border-gray-200 rounded-lg shadow">
+                        <a href="https://github.com/cuappdev/ithaca-transit-compose">
+                            <img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
+                        </a>
+                        <div class="p-5">
+                            <a href="https://github.com/cuappdev/ithaca-transit-compose">
+                                <h5 class="mb-2 text-lg font-bold tracking-tight text-white">Ithaca Transit</h5>
+                            </a>
+                            <p class="mb-3 text-sm font-normal text-gray-400">A route planning Android app for navigating the city of Ithaca using the TCAT public transportation system</p>
+                            <a href="https://github.com/cuappdev/ithaca-transit-compose" class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Vertical card -->
+                    <div class="max-w-xs bg-slate-800 hover:bg-gray-900 border border-gray-200 rounded-lg shadow">
+                        <a href="https://jonochen.net/playlistle/">
+                            <img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
+                        </a>
+                        <div class="p-5">
+                            <a href="https://jonochen.net/playlistle/">
+                                <h5 class="mb-2 text-lg font-bold tracking-tight text-white">Playlistle</h5>
+                            </a>
+                            <p class="mb-3 text-sm font-normal text-gray-400">Daily song guessing game based on my Spotify playlists</p>
+                            <a href="https://jonochen.net/playlistle/" class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+                                Link
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Vertical card -->
+                    <div class="max-w-xs bg-slate-800 hover:bg-gray-900 border border-gray-200 rounded-lg shadow">
+                        <a href="#">
+                            <img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
+                        </a>
+                        <div class="p-5">
+                            <a href="#">
+                                <h5 class="mb-2 text-lg font-bold tracking-tight text-white">CS2 Crosshair Placement</h5>
+                            </a>
+                            <p class="mb-3 text-sm font-normal text-gray-400">Prototype computer vision assistant to analyzing player performance for the game Counter-Strike 2</p>
+                            <a href="#" class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Vertical card -->
+                    <div class="max-w-xs bg-slate-800 hover:bg-gray-900 border border-gray-200 rounded-lg shadow">
+                        <a href="https://github.com/04jono/critter-world-writeup">
+                            <img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
+                        </a>
+                        <div class="p-5">
+                            <a href="https://github.com/04jono/critter-world-writeup">
+                                <h5 class="mb-2 text-lg font-bold tracking-tight text-white">Critter World</h5>
+                            </a>
+                            <p class="mb-3 text-sm font-normal text-gray-400">Artificial life simulator with programmable critters</p>
+                            <a href="https://github.com/04jono/critter-world-writeup" class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg focus:outline-none bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
