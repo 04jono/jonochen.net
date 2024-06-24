@@ -96,3 +96,21 @@ img.profile {
     margin-right: auto;
     object-fit: cover;
 }
+
+ul.no-bullets {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li.no-bullets {
+    margin: 10px 0px 10px 0px;
+}
+
+a.company {
+    text-decoration: underline;
+    color: white;
+}
+a.company:hover {
+    color: white;
+}
