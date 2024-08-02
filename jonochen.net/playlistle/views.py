@@ -14,20 +14,20 @@ def playlistle(request):
     date = request.GET.get('date', None)
     if date != None:
         try: 
-            return render(request, "playlistle/playlistle.html", get_songofday(date))
+            return render(request, 'playlistle/playlistle.html', get_songofday(date))
         except ValueError:
-            return HttpResponse("There was an problem with your request", 400)
+            return HttpResponse('There was an problem with your request', 400)
     else:
-        return render(request, "playlistle/playlistle.html", get_songofday())
+        return render(request, 'playlistle/playlistle.html', get_songofday())
 
 @csrf_protect
 def get_all_song_identifiers(request):
     '''Get all song identifiers'''
     if request.method == 'GET':
         song_identifiers = [song.song_identifier for song in Song.objects.all()]
-        return JsonResponse({"song_identifiers": song_identifiers})
+        return JsonResponse({'song_identifiers': song_identifiers})
     else:
-        return HttpResponseNotFound("No GET request found")
+        return HttpResponseNotFound('No GET request found')
 
 @csrf_protect
 def get_song_hash(request):
@@ -36,12 +36,12 @@ def get_song_hash(request):
         date = request.GET.get('date', None)
         songofday = SongOfDay.objects.latest('date_added').song
         if date != None:
-            date_format = "%Y-%m-%d"
+            date_format = '%Y-%m-%d'
             parsed_date = datetime.datetime.strptime(date, date_format).date()
             songofday = SongOfDay.objects.filter(date_added=parsed_date).first().song
-        return JsonResponse({"song_hash": hash(songofday.song_identifier)})
+        return JsonResponse({'song_hash': hash(songofday.song_identifier)})
     else:
-        return HttpResponseNotFound("No GET request found")
+        return HttpResponseNotFound('No GET request found')
 
 @csrf_protect
 def get_clipped_song(request):
@@ -51,13 +51,13 @@ def get_clipped_song(request):
             date = request.GET.get('date', None)
             songofday = SongOfDay.objects.latest('date_added').song
             if date != None:
-                date_format = "%Y-%m-%d"
+                date_format = '%Y-%m-%d'
                 parsed_date = datetime.datetime.strptime(date, date_format).date()
                 songofday = SongOfDay.objects.filter(date_added=parsed_date).first().song
             
             input_file = os.path.join(settings.MEDIA_ROOT, songofday.database_uri)
             length = int(request.GET.get('length'))
-            out, err = ffmpeg.input(input_file, t=length).output("pipe:", format="mp3").run(capture_stdout=True)
+            out, err = ffmpeg.input(input_file, t=length).output('pipe:', format='mp3').run(capture_stdout=True)
 
             response = HttpResponse()
             response.write(out)
@@ -66,9 +66,9 @@ def get_clipped_song(request):
             return response
         except Exception as e:
             print(e)
-            return HttpResponseServerError("Error processing song")
+            return HttpResponseServerError('Error processing song')
     else:
-        return HttpResponseNotFound("No GET request found")
+        return HttpResponseNotFound('No GET request found')
 
 def get_songofday(date : str | None = None) -> dict:
     '''Get the song of the day. Optional: specify date string'''
@@ -76,30 +76,33 @@ def get_songofday(date : str | None = None) -> dict:
     if date == None:
         songofday = SongOfDay.objects.latest('date_added')
         curr_song = songofday.song
-        return {"song_name": curr_song.song_name, 
-            "artist": curr_song.artist, 
-            "release_year": curr_song.release_year, 
-            "album_url": curr_song.album_url, 
-            "playlist": curr_song.playlist,
-            "song_identifier": curr_song.song_identifier,
-            "date_added": songofday.date_added.strftime("%Y-%m-%d")
+        return {'song_name': curr_song.song_name, 
+            'artist': curr_song.artist, 
+            'release_year': curr_song.release_year, 
+            'album_url': curr_song.album_url, 
+            'playlist': curr_song.playlist,
+            'song_identifier': curr_song.song_identifier,
+            'date_added': songofday.date_added.strftime('%Y-%m-%d'),
+            'latest_date': get_latest_date()
             }
     else:
-        date_format = "%Y-%m-%d"
+        date_format = '%Y-%m-%d'
         parsed_date = datetime.datetime.strptime(date, date_format).date()
         songofday = SongOfDay.objects.filter(date_added=parsed_date).first()
         curr_song = songofday.song
-        return {"song_name": curr_song.song_name, 
-            "artist": curr_song.artist, 
-            "release_year": curr_song.release_year, 
-            "album_url": curr_song.album_url, 
-            "playlist": curr_song.playlist,
-            "song_identifier": curr_song.song_identifier,
-            "date_added": songofday.date_added.strftime("%Y-%m-%d")
+        return {'song_name': curr_song.song_name, 
+            'artist': curr_song.artist, 
+            'release_year': curr_song.release_year, 
+            'album_url': curr_song.album_url, 
+            'playlist': curr_song.playlist,
+            'song_identifier': curr_song.song_identifier,
+            'date_added': songofday.date_added.strftime('%Y-%m-%d'),
+            'latest_date': get_latest_date()
         }
         
-        
-
+def get_latest_date():
+    '''Get the date of the last song entry'''   
+    return SongOfDay.objects.latest('date_added').date_added.strftime('%Y-%m-%d')
 
 @csrf_protect
 def submit_song(request):
@@ -109,31 +112,31 @@ def submit_song(request):
         ##if song exists
         req_song = Song.objects.filter(song_identifier=song_string)
         if req_song.exists():
-            res = {"exists": True}
+            res = {'exists': True}
             
             date = request.POST.get('date', None)
             songofday = SongOfDay.objects.latest('date_added').song
             if date != None:
                 try:
-                    date_format = "%Y-%m-%d"
+                    date_format = '%Y-%m-%d'
                     parsed_date = datetime.datetime.strptime(date, date_format).date()
                     songofday = SongOfDay.objects.filter(date_added=parsed_date).first().song
                 except:
                     songofday = SongOfDay.objects.latest('date_added').song
         
             if songofday.song_identifier == str(song_string):
-                res["is_song"] = True
+                res['is_song'] = True
             else:
-                if songofday.artist == str(song_string).split(" - ")[0].translate(str.maketrans('', '', string.punctuation)):
+                if songofday.artist == str(song_string).split(' - ')[0].translate(str.maketrans('', '', string.punctuation)):
                     #Same artist
-                    res["is_artist"] = True
+                    res['is_artist'] = True
                 else:
-                    res["is_artist"] = False
-                res["is_song"] = False
+                    res['is_artist'] = False
+                res['is_song'] = False
             return JsonResponse(res)
         else:
-            return JsonResponse({"exists": False})
+            return JsonResponse({'exists': False})
     else:
-        return HttpResponseNotFound("No POST request found")
+        return HttpResponseNotFound('No POST request found')
     
 
