@@ -48,4 +48,5 @@ def reset_daily():
         time.sleep(15 * 60)
 
 if __name__ == '__main__':
+    time.sleep(10)
     reset_daily()

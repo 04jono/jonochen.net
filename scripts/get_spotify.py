@@ -94,29 +94,31 @@ if __name__ == '__main__':
 
         ## Download the tracks
         for track in tracks:
+            try:
+                preview = get_track_preview(sp, track['track']['id'])
+                if preview != "":
+                    track_name = track['track']['artists'][0]['name'].translate(str.maketrans('', '', string.punctuation))
+                    track_artist = track['track']['name'].translate(str.maketrans('', '', string.punctuation))
 
-            preview = get_track_preview(sp, track['track']['id'])
-            if preview != "":
-                track_name = track['track']['artists'][0]['name'].translate(str.maketrans('', '', string.punctuation))
-                track_artist = track['track']['name'].translate(str.maketrans('', '', string.punctuation))
+                    file_name = track_artist.replace(' ', '_') + '_' + track_name.replace(' ', '_') + ".mp3"
+                    song_identifier = track['track']['artists'][0]['name'] + " - " + track['track']['name']
 
-                file_name = track_artist.replace(' ', '_') + '_' + track_name.replace(' ', '_') + ".mp3"
-                song_identifier = track['track']['artists'][0]['name'] + " - " + track['track']['name']
+                    dest = folder_path + file_name
+                    download_mp3_from_cdn(preview, dest)
 
-                dest = folder_path + file_name
-                download_mp3_from_cdn(preview, dest)
-
-                if song_identifier not in duplicate_keys:
-                    row_data.append((track['track']['name'], 
-                                 track['track']['artists'][0]['name'], 
-                                 track['track']['album']['release_date'][:4], 
-                                 track['track']['album']['images'][0]['url'],
-                                 file_name,
-                                 playlist['name'],
-                                 song_identifier))
-                    duplicate_keys.add(song_identifier)
-                
-                print(dest)
+                    if song_identifier not in duplicate_keys:
+                        row_data.append((track['track']['name'], 
+                                    track['track']['artists'][0]['name'], 
+                                    track['track']['album']['release_date'][:4], 
+                                    track['track']['album']['images'][0]['url'],
+                                    file_name,
+                                    playlist['name'],
+                                    song_identifier))
+                        duplicate_keys.add(song_identifier)
+                    
+                    print(dest)
+            except:
+                print("Failed to download track")
         
     ##Write to database:
     try:
