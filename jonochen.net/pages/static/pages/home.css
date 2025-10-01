@@ -4,16 +4,10 @@ html
 }
 
 .my-container {
+    margin-top: 40px;
     max-width: fit-content;
     margin-left: auto;
     margin-right: auto;
-}
-
-.img-container {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
 }
 
 .name {

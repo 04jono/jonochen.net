@@ -16,7 +16,7 @@ User-agent: GPTBot
 Disallow: /
 """
 
-ALLOW_RESUME = False
+ALLOW_RESUME = True
 
 @require_GET
 def robots(request):
