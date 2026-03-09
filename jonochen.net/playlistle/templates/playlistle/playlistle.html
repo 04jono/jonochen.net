@@ -352,6 +352,9 @@
         <h5 class="modal-title">The answer was: {{ song_identifier }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
+      <div style="display:flex;justify-content:center;padding:16px 0 0;">
+        <img src="{{ album_url }}" alt="Album Art" style="width:150px;height:150px;object-fit:cover;border-radius:8px;" />
+      </div>
       <div class="modal-body" id="share-modal-body">...</div>
       <div class="modal-footer">
         <button id="copy" type="button" class="btn btn-primary">Copy to clipboard</button>
@@ -367,9 +370,6 @@
       <div class="modal-header" style="display:flex;flex-direction:row;justify-content:space-between;">
         <h5 class="modal-title">Playlistle Archives</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
-      <div style="display:flex;justify-content:center;padding:16px 0 0;">
-        <img src="{{ album_url }}" alt="Album Art" style="width:150px;height:150px;object-fit:cover;border-radius:8px;" />
       </div>
       <div class="calendar-modal-body" style="display: flex; justify-content: center;">
         <div id="datepicker"></div>
