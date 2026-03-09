@@ -31,7 +31,7 @@ services:
     volumes:
       - song-data:/app/data:rw
     profiles: [spotify]
-    command: python get_spotify.py --filter arsch
+    command: python get_spotify.py --filter "arsch,aa"
 
   reset-daily:
     env_file:

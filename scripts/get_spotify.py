@@ -16,24 +16,44 @@ from psycopg2 import Error
 import time
 import string
 
+import re
+
+
+# Source: https://github.com/rexdotsh/spotify-preview-url-workaround
+def get_spotify_preview_url(spotify_track_id: str):
+    """
+    Get the preview URL for a Spotify track using the embed page workaround.
+
+    Args:
+        spotify_track_id (str): The Spotify track ID
+
+    Returns:
+        Optional[str]: The preview URL if found, else None
+    """
+    try:
+        embed_url = f"https://open.spotify.com/embed/track/{spotify_track_id}"
+        response = requests.get(embed_url)
+        response.raise_for_status()
+
+        html = response.text
+        match = re.search(r'"audioPreview":\s*{\s*"url":\s*"([^"]+)"', html)
+        return match.group(1) if match else None
+
+    except Exception as e:
+        print(f"Failed to fetch Spotify preview URL: {e}")
+        return None
+
 
 def pretty_print(json_obj):
     print(json.dumps(json_obj, indent=2))
 
-def get_playlist_tracks(sp, username,playlist_id):
-    results = sp.user_playlist_tracks(username,playlist_id)
+def get_playlist_tracks(sp, playlist_id):
+    results = sp.playlist_items(playlist_id, additional_types=('track',))
     tracks = results['items']
     while results['next']:
         results = sp.next(results)
         tracks.extend(results['items'])
     return tracks
-
-def get_track_preview(sp, track_id):
-    track_info = sp.track(track_id)
-    if track_info and track_info['preview_url']:
-        return track_info['preview_url']
-    else:
-        return ""
 
 def download_mp3_from_cdn(url, save_path):
     try:
@@ -45,7 +65,6 @@ def download_mp3_from_cdn(url, save_path):
 
 
 if __name__ == '__main__':
-
     #Get arguments
     parser = argparse.ArgumentParser(description='Get MP3 data')
     parser.add_argument('--filter', type=str, help='Filter on playlists')
@@ -70,10 +89,12 @@ if __name__ == '__main__':
 
     #pretty_print(playlists)
 
-    filter = ''
+    filters = []
     if args.filter:
-        filter = args.filter.lower()
-
+        filters = [f.strip().lower() for f in args.filter.split(',')]
+        
+    print(filters)
+    
     folder_path = "data/"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -84,18 +105,19 @@ if __name__ == '__main__':
     ## Loop through the playlists
     for playlist in playlists['items']:
         #Filter by name
-        if filter not in playlist['name'].lower():
+        playlist_name_lower = playlist['name'].lower()
+        if filters and not any(f in playlist_name_lower for f in filters):
             continue
 
         print("Playlist: " + playlist['name'])
         print("-------------------------------")
 
-        tracks = get_playlist_tracks(sp, user_id, playlist['id'])
+        tracks = get_playlist_tracks(sp, playlist['id'])
 
         ## Download the tracks
         for track in tracks:
             try:
-                preview = get_track_preview(sp, track['track']['id'])
+                preview = get_spotify_preview_url(track['track']['id'])
                 if preview != "":
                     track_name = track['track']['artists'][0]['name'].translate(str.maketrans('', '', string.punctuation))
                     track_artist = track['track']['name'].translate(str.maketrans('', '', string.punctuation))
@@ -138,7 +160,7 @@ if __name__ == '__main__':
         print("You are connected to - ", record,"\n")
 
         #Insert into database
-        insert_query = 'INSERT INTO playlistle_song (song_name, artist, release_year, album_url, database_uri, playlist, song_identifier) VALUES %s'
+        insert_query = 'INSERT INTO playlistle_song (song_name, artist, release_year, album_url, database_uri, playlist, song_identifier) VALUES %s ON CONFLICT (song_identifier) DO NOTHING'
         psycopg2.extras.execute_values (
             cursor, insert_query, row_data, template=None, page_size=100
         )
