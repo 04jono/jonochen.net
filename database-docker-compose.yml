@@ -1,0 +1,21 @@
+services:
+  db:
+    build:
+      context: ./database
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - jonochen.net
+    expose:
+      - "5432"
+
+
+networks:
+  jonochen.net:
+    external: true
+
+volumes:
+  pgdata:

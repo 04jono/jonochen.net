@@ -8,19 +8,8 @@ services:
       - "127.0.0.1:8000:8000"
     volumes:
       - song-data:/app/media:r
-    depends_on:
-      - db
-  
-  db:
-    build:
-      context: ./database
-      dockerfile: ./Dockerfile
-    env_file:
-      - .env
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    expose:
-      - "5432"
+    networks:
+      - jonochen.net
 
   spotify:
     env_file:
@@ -30,6 +19,8 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - song-data:/app/data:rw
+    networks:
+      - jonochen.net
     profiles: [spotify]
     command: python get_spotify.py --filter "arsch,aa"
 
@@ -39,10 +30,15 @@ services:
     build:
       context: ./scripts
       dockerfile: ./Dockerfile
+    networks:
+      - jonochen.net
     command: python reset_daily.py
 
 volumes:
   song-data:
-  pgdata:
+
+networks:
+  jonochen.net:
+    external: true
 
     
